@@ -61,10 +61,13 @@ public class AuthenticationController {
     public ResponseEntity<?> refreshToken(@RequestHeader(HEADER_STRING) String authorization, @RequestBody String refreshToken) throws Exception {
         // Check Database for Refresh Token, invalidate
         Refresh refresh = refreshService.getRefreshByToken(refreshToken);
+        //TODO check timing of refresh token
         if(refresh == null || !refresh.isValidRefresh()){
+            //TODO invalidate all refresh tokens for this user, possible comprimise
             return (ResponseEntity<?>) ResponseEntity.status(HttpStatus.UNAUTHORIZED);
+           
         }
-        //check timing of refresh token
+        
 
         refreshService.invalidate(refresh);
 
